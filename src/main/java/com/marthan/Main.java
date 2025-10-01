@@ -24,35 +24,17 @@ public class Main {
             String nameOperation = arguments.size() > 1 ? arguments.get(1) : " ";
 
             switch (nameOperation) {
-                case "add":
-                    TaskService.add(arguments);
-                    break;
-                case "update":
-                    TaskService.update(arguments);
-                    break;
-                case "mark-in-done":
-                    TaskService.markInDone(arguments);
-                    break;
-                case "mark-in-progress":
-                    TaskService.markInProgress(arguments);
-                    break;
-                case "list":
-                    TaskService.listAll();
-                    break;
-                case "list-done":
-                    TaskService.listDone();
-                    break;
-                case "list-in-progress":
-                    TaskService.listInProgress();
-                    break;
-                case "delete":
-                    TaskService.delete(arguments);
-                    break;
-                default:
-                    System.out.println("please select a argument <ADD, UPDATE, DELETE>");
-                    break;
+                case "add" -> TaskService.add(arguments);
+                case "update" -> TaskService.update(arguments);
+                case "mark-in-done" -> TaskService.markInDone(arguments);
+                case "mark-in-progress" -> TaskService.markInProgress(arguments);
+                case "list" -> TaskService.listAll();
+                case "list-done" -> TaskService.listDone();
+                case "list-in-progress" -> TaskService.listInProgress();
+                case "delete" -> TaskService.delete(arguments);
             }
-
+            System.out.printf("please select a command <ADD, UPDATE, DELETE>.%nRun again");
+            return;
         }
     }
 }
