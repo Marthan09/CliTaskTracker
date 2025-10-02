@@ -32,9 +32,8 @@ public class Main {
                 case "list-done" -> TaskService.listDone();
                 case "list-in-progress" -> TaskService.listInProgress();
                 case "delete" -> TaskService.delete(arguments);
+                default -> System.out.printf("please select a command <ADD, UPDATE, DELETE>.%nRun again");
             }
-            System.out.printf("please select a command <ADD, UPDATE, DELETE>.%nRun again");
-            return;
         }
     }
 }
