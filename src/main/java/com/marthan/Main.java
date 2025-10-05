@@ -1,5 +1,6 @@
 package com.marthan;
 
+import com.marthan.domain.TaskStatus;
 import com.marthan.service.TaskService;
 
 import java.util.Arrays;
@@ -9,7 +10,7 @@ import java.util.Scanner;
 public class Main {
 
     public static void main(String[] args) {
-        TaskService.loadListOnJson();
+        TaskService.loadFiles();
         Scanner keyboard = new Scanner(System.in);
 
         while (true) {
@@ -26,11 +27,11 @@ public class Main {
             switch (nameOperation) {
                 case "add" -> TaskService.add(arguments);
                 case "update" -> TaskService.update(arguments);
-                case "mark-in-done" -> TaskService.markInDone(arguments);
-                case "mark-in-progress" -> TaskService.markInProgress(arguments);
+                case "mark-in-done" -> TaskService.markIn(arguments, TaskStatus.DONE);
+                case "mark-in-progress" -> TaskService.markIn(arguments, TaskStatus.IN_PROGRESS);
                 case "list" -> TaskService.listAll();
-                case "list-done" -> TaskService.listDone();
-                case "list-in-progress" -> TaskService.listInProgress();
+                case "list-in-done" -> TaskService.listIn(TaskStatus.DONE);
+                case "list-in-progress" -> TaskService.listIn(TaskStatus.IN_PROGRESS);
                 case "delete" -> TaskService.delete(arguments);
                 default -> System.out.printf("please select a command <ADD, UPDATE, DELETE>.%nRun again");
             }

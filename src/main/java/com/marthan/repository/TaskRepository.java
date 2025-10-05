@@ -3,6 +3,7 @@ package com.marthan.repository;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.marthan.domain.Task;
+import lombok.Getter;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -11,23 +12,36 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 
+
 public class TaskRepository {
     private static final Path FILE_ID_PATH = Paths.get("FolderTask/taskId.txt");
     private static final Path FILE_TASK_PATH = Paths.get("FolderTask/Tasks.json");
     private static final ObjectMapper mapper = new ObjectMapper();
+    @Getter
+    private static Long taskID = 1L;
 
-    public static void saveId(Long taskId) {
+    private static void saveId() {
         try {
             if (Files.notExists(FILE_ID_PATH)) {
                 Files.createFile(FILE_ID_PATH);
             }
-            Files.writeString(FILE_ID_PATH, String.valueOf(taskId));
+            Files.writeString(FILE_ID_PATH, String.valueOf(taskID));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static void saveListOnJson(List<Task> taskList) {
+    public static void saveFiles(List<Task> taskList){
+        saveId();
+        saveListOnJson(taskList);
+    }
+
+    public static Optional<List<Task>> loadFiles(){
+        loadId();
+        return loadListOnJson();
+    }
+
+    private static void saveListOnJson(List<Task> taskList) {
         try {
             Path foderPath = Paths.get("FolderTask");
             if (Files.notExists(foderPath)){
@@ -46,11 +60,12 @@ public class TaskRepository {
         }
     }
 
-    public static void loadId(Long taskId) {
+    private static void loadId() {
         try {
             if (Files.exists(FILE_ID_PATH)) {
                 if (Files.size(FILE_ID_PATH) > 0) {
-                    taskId = Long.valueOf(Files.readString(FILE_ID_PATH));
+                    taskID = Long.valueOf(Files.readString(FILE_ID_PATH));
+                    taskID++;
                 }
             }
 
@@ -59,8 +74,9 @@ public class TaskRepository {
         }
     }
 
-    public static Optional<List<Task>> loadListOnJson(List<Task> taskList) {
+    private static Optional<List<Task>> loadListOnJson() {
         try {
+
             if (Files.notExists(FILE_TASK_PATH)){
                 return Optional.empty();
             }
@@ -68,8 +84,7 @@ public class TaskRepository {
             if (Files.size(FILE_TASK_PATH) > 0) {
                 ObjectMapper mapper = new ObjectMapper();
                 String json = Files.readString(FILE_TASK_PATH);
-                return Optional.ofNullable(taskList = mapper.readValue(json, new TypeReference<>() {
-                }));
+                return Optional.ofNullable(mapper.readValue(json, new TypeReference<>() {}));
             }
 
         } catch (IOException e) {
